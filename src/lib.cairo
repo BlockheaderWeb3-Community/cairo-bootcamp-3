@@ -1,4 +1,4 @@
-fn main() {
+  fn main() {
     let sum_1: u8 = intro_to_uint();
     let sum_2: u8 = sum_u8(2, 2);
   
@@ -20,5 +20,3 @@ fn main() {
   fn sum_u8(x: u8, y: u8) -> u8 {
       x + y 
   }
-  
-  
