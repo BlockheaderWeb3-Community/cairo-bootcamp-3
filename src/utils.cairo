@@ -8,5 +8,6 @@ pub fn high_to_low(x: u16) -> u8 {
     x.try_into().unwrap()
 }
 
-
-
+pub fn addition(x: u16, y: u16) -> u16 {
+    x + y
+}

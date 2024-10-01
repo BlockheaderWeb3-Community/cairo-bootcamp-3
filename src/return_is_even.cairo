@@ -1,10 +1,7 @@
-
-pub fn sum_u16(x: u16, y: u16) -> u16 {
-    x + y
-}
+use crate::utils::addition;
 
 pub fn run(x: u16, y: u16) -> bool {
-    let result = sum_u16(x, y);
+    let result = addition(x, y);
     if result % 2 == 0 {
         true
     } else {
