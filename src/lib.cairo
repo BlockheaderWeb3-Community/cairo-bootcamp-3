@@ -1,13 +1,12 @@
-mod session_4;
-mod intro_to_uint;
 mod intro_to_felt;
-mod sum_u8;
+mod intro_to_u8;
+mod intro_to_u16;
+mod intro_to_bytearray;
+
 fn main() {
-    let sum_1: u8 = intro_to_uint::run();
-    let sum_2: u8 = sum_u8::run(2, 2);
-
-    println!("result_1 {} | result_2 is {} ", sum_1, sum_2);
-
-    session_4::main();
     intro_to_felt::run();
+    intro_to_u8::run(5, 5);
+    intro_to_u16::run(5, 5);
+    intro_to_bytearray::run();
 }
+

@@ -1,4 +1,5 @@
 pub fn run() -> felt252 {
-    let my_first_char: felt252 = 'GM';
-    my_first_char
+    let x = 'SAY GM!';
+    println!("x value here: {}", x);
+    x
 }
