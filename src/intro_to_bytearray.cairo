@@ -1,5 +1,6 @@
+// for any string exceeding 31 chars, use ByteArray
 pub fn run() -> ByteArray {
-    let name_of_school: ByteArray = "Cairo Bootcamp 3 2024 in Kaduna is holding as a hybrid class";
+    let name_of_school: ByteArray = "Cairo Bootcamp 3 2024 is holding as a hybrid class";
     println!(" our school desc: {}", name_of_school);
     name_of_school
 }
