@@ -1,4 +1,4 @@
-# Assignnment 3
+# Assignment 3
 1. Create different functions for:
     - subtraction
     - multiplication
