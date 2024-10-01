@@ -1,8 +1,13 @@
-mod intro_logic;
+mod intro_to_felt;
+mod intro_to_u8;
+mod intro_to_u16;
+mod intro_to_bytearray;
+pub mod utils;
 
 fn main() {
-    intro_to_bytearray();
-    // If you don't specify typ in variable declaration, it will take it as felt
-    let sum_u16: u16 = intro_logic::intro_to_u16(5,10)
-    println("sum result: {}", sum_u16)
+    intro_to_felt::run();
+    intro_to_u8::run(5, 5);
+    intro_to_u16::run(5, 5);
+    intro_to_bytearray::run();
 }
+
