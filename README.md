@@ -1,39 +1,75 @@
-# Introduction to Cairo
+## Introduction to Starknet Contracts
 
-On this branch of this repo, we explore the core fundamentals for writing a Cairo program. 
+1. Install starknet-foundry by running this command:
+   `curl -L https://raw.githubusercontent.com/foundry-rs/starknet-foundry/master/scripts/install.sh | sh`
 
-##  Setting Up Development Environment
+2. Restart your terminal
+   run `snfoundryup`
 
-### 1. Scarb
-Cairo can be installed by simply downloading Scarb. Scarb bundles the Cairo compiler and the Cairo language server together in an easy-to-install package so that you can start writing Cairo code right away.
+3. Use this free RPC provider: https://free-rpc.nethermind.io/sepolia-juno/
 
-Run the following in your terminal, then follow the onscreen instructions. This will install the latest stable release.
+4. Create an account contract by running this command on your terminal:
+   `sncast account create --url https://free-rpc.nethermind.io/sepolia-juno --name cohort_dev`
 
-``` =shell
-curl --proto '=https' --tlsv1.2 -sSf https://docs.swmansion.com/scarb/install.sh | sh
+5. Deploy the account contract:
+   `sncast account deploy --url https://free-rpc.nethermind.io/sepolia-juno --name cohort_dev --fee-token eth`
+
+> `NB`
+> Running the above command should trigger an error:
+> `error: Account balance is smaller than the transaction's max_fee`.
+> That why your account must be funded; to fund your account, visit - https://starknet-faucet.vercel.app/ and paste the account address that was generated on step 4 to request for testnet token.
+
+6. Compile your contract by running:
+   `scarb build`
+
+
+> If you get an error like `scarb: command not found`, then it means you don't have scarb installed. To install scarb, run this command in your terminal `curl --proto '=https' --tlsv1.2 -sSf https://docs.swmansion.com/scarb/install.sh | sh`. You can checkout the full guide [here](https://docs.swmansion.com/scarb/download.html) 
+
+7. Declare your contract:
+   `sncast --account cohort_dev declare --url https://free-rpc.nethermind.io/sepolia-juno --fee-token eth --contract-name Counter`
+   > Example of a contract name is `Counter`
+
+
+
+8. Deploy your contract:
+   `sncast --account cohort_dev deploy --url https://free-rpc.nethermind.io/sepolia-juno --fee-token eth --class-hash 0x70eef4488bd1858900685210e5afb64d827e6e2bebfd85b01ff8b46d4584471`
+
+
+
+🥳🥳🥳 You have successfully deployed your first contract
+
+Alternatively, you can create a `snfoundry.toml` with the following config:
+
+```
+[sncast.deploy_dev]
+account = "deploy_dev"
+accounts-file = "~/.starknet_accounts/starknet_open_zeppelin_accounts.json"
+url = "https://free-rpc.nethermind.io/sepolia-juno/"
 ```
 
+Using this approach simplifies interactions using `sncast` as you can simply run commands this command to declare a contract:
+`sncast --profile <name_of_profile_on_snfoundry.toml> declare --contract-name <name_of_contract_to_be_deployed>`
 
-To check if scarb is successfully installed, run either: 
-- `scarb --version` - returns the version of scarb
-- `which scarb` - returns the path to the scarb bin on your machine
+While deploying, make sure you check the constructor argument of the contract you are trying to deploy. All arguments must be passed in appropriately; for such case, use this command:
+`sncast  --profile <name_of_profile_on_snfoundry.toml>  --class-hash <your_class_hash>  --constructor-calldata <your_constructor_args>`
 
-
-### Install Scarb via asdf (for macOS and Linux only)
-`asdf` is a CLI tool that can manage multiple language runtime versions on a per-project basis. 
-
-Install `asdf`:
-- https://asdf-vm.com/guide/getting-started.html
-
-- Run the following command to add the scarb plugin:
-- `asdf plugin add scarb`
-
-With scarb installed, you are set to writing Cairo programs. 
-
-To spin up a program, run `scarb new gm_cairo` 
-
-The entry point to our program is housed within the logic of `main` function in `lib.cairo`
-
-To compile your program, run `scarb cairo-run`
+---
 
 
+
+---
+
+##### Interacting with Deployed Contracts
+
+- Invoke: to execute the logic of a state-changing (writes) function within your deployed contracts from the terminal, run
+  `sncast --url https://free-rpc.nethermind.io/sepolia-juno --account cohort_dev invoke --contract-address <your_contract_address> --function "<your_function_name>" --calldata 10`
+  If you have configured your `snfoundry.toml` file, run:
+  `sncast --profile <your_profile> invoke --contract-address <your_contract_address> --function "<your_function_name>" --calldata <fn_args>`
+
+- Call: to execute the logic of a non-state-changing (reads) function within your deployed contracts from the terminal, run:
+  `sncast --url https://free-rpc.nethermind.io/sepolia-juno --account cohort_dev call --contract-address <your_contract_address> --function "<your_function_name>"`
+
+NB:
+In the event the function to be called accepts some args, append the call `--calldata` flag to the above invoke and call commands with the appropriate args.
+
+To compile your contract, run `scarb build`
