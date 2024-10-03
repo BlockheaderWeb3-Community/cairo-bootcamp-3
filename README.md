@@ -16,7 +16,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://docs.swmansion.com/scarb/install.sh
 
 To check if scarb is successfully installed, run either: 
 - `scarb --version` - returns the version of scarb
-- `which scarb` - returns the path to the scarb bin on your maching 
+- `which scarb` - returns the path to the scarb bin on your machine
 
 
 ### Install Scarb via asdf (for macOS and Linux only)
