@@ -11,3 +11,15 @@ pub fn high_to_low(x: u16) -> u8 {
 pub fn sum_u8(x: u8, y: u8) -> u8 {
     x + y
 }
+
+pub fn sub_u8(x: u8, y: u8) -> u8{
+    x - y 
+}
+
+pub fn multiply_u8(x: u8, y: u8) -> u8{ 
+    x * y 
+}
+
+pub fn divide_u8(x: u8, y: u8) -> u8{ 
+    x / y 
+}
