@@ -26,6 +26,7 @@ trait ICounterV2<TContractState> {
 
 #[starknet::contract]
 mod CounterV2 {
+    use core::num::traits::Zero;
     use super::ICounterV2;
     use starknet::{ContractAddress, get_caller_address};
     #[storage]
@@ -36,6 +37,8 @@ mod CounterV2 {
 
     #[constructor]
     fn constructor(ref self: ContractState, _owner: ContractAddress) {
+        // validation to check if owner is valid address and 0 address
+        assert(self.is_zero_address(_owner) == false, '0 address');
         self.owner.write(_owner);
     }
 
@@ -54,8 +57,11 @@ mod CounterV2 {
             // validation to ensure only owner can invoke this function
             self.only_owner();
 
+            // validation to check if new owner is 0 address
+            assert(self.is_zero_address(new_owner) == false, '0 address');
             // assert that new owner is not the current owner
             assert(self.get_current_owner() != new_owner, 'same owner');
+
             self.owner.write(new_owner);
         }
 
@@ -85,10 +91,17 @@ mod CounterV2 {
             assert(caller == current_owner, 'caller not owner');
         }
 
-        
+
+        fn is_zero_address(self: @ContractState, account: ContractAddress) -> bool {
+            if account.is_zero() {
+                return true;
+            }
+            return false;
+        }
     }
 }
-
-
 // 0x65f0904d094297f08575291f2da8600b60c12e764b63fdfef8c1044a3eaa34b
 // 0x6f2f6eb269f9741d5bb9cb633bfb632a0d71e0622b195ef4c4e66e8f1fee9fe
+// 0x000000000000000000000000000000000000000000000000000000000000000
+
+
