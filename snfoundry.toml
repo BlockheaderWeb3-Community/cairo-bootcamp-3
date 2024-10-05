@@ -1,0 +1,4 @@
+[sncast.intro_contract] 
+account = "intro_contract" 
+accounts-file  = "~/.starknet_accounts/starknet_open_zeppelin_accounts.json" 
+url = "https://free-rpc.nethermind.io/sepolia-juno/"
