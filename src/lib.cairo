@@ -1,3 +1,4 @@
+
 // trait - blueprint which specifies the function signatures we intend to build
 // module - which houses:
 //  - storage Struct
@@ -12,6 +13,7 @@ trait ICounter<TContractState> {
     // set count
     fn set_count(ref self: TContractState, amount: u32);
 }
+
 
 #[starknet::contract]
 mod Counter {
