@@ -3,7 +3,8 @@
 // module - which houses:
 //  - storage Struct
 //  - impl block
-
+mod counter_v1;
+mod counter_v2;
 #[starknet::interface]
 trait ICounter<TContractState> {
     // get count - retrieve the count from storage
