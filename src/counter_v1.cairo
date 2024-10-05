@@ -1,4 +1,3 @@
-
 // trait - blueprint which specifies the function signatures we intend to build
 // module - which houses:
 //  - storage Struct
