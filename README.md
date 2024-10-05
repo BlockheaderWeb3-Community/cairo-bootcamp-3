@@ -47,8 +47,16 @@ accounts-file = "~/.starknet_accounts/starknet_open_zeppelin_accounts.json"
 url = "https://free-rpc.nethermind.io/sepolia-juno/"
 ```
 
-Using this approach simplifies interactions using `sncast` as you can simply run commands this command to declare a contract:
+##### Super-charge your `sncast` by adding a profile
+This approach simplifies interactions using `sncast` as you can simply run commands completely eliminating the need to to add `--url` and `--name` flags whenever you want to run each sncast command:
 `sncast --profile <name_of_profile_on_snfoundry.toml> declare --contract-name <name_of_contract_to_be_deployed>`
+Eg: `sncast -u https://free-rpc.nethermind.io/sepolia-juno/ account create -n cohort_dev --add-profile cohort_dev`. This command automatically creates a profile for you in the root of your project directory. Meaning you will find an auto-created file named `snfoundry.toml` file  with the following configurations:
+```
+[sncast.cohort_dev] 
+account = "cohort_dev" 
+accounts-file  = "~/.starknet_accounts/starknet_open_zeppelin_accounts.json" 
+url = "https://free-rpc.nethermind.io/sepolia-juno/"
+```
 
 While deploying, make sure you check the constructor argument of the contract you are trying to deploy. All arguments must be passed in appropriately; for such case, use this command:
 `sncast  --profile <name_of_profile_on_snfoundry.toml>  --class-hash <your_class_hash>  --constructor-calldata <your_constructor_args>`
