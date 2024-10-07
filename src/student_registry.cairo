@@ -22,7 +22,7 @@ mod StudentRegistry {
     use starknet::storage::{
         StoragePointerReadAccess, StoragePointerWriteAccess, StoragePathEntry, Map
     };
-    use crate::errors::Errors::{NOT_ADMIN, ZERO_ADDRESS};
+    use crate::errors::Errors::{NOT_ADMIN, ZERO_ADDRESS, EMPTY_STRING, ZERO_VALUE, SAME_ADDRESS};
 
     #[storage]
     struct Storage {
@@ -51,7 +51,12 @@ mod StudentRegistry {
         ) {
             // validation to check if student account is valid address and  not a 0 address
             assert(!self.is_zero_address(_account), ZERO_ADDRESS);
-            assert(_age > 0, 'age cannot be 0');
+            let _admin = self.admin.read(); 
+            assert(_account != _admin, SAME_ADDRESS);
+            
+            assert(_age > 0, ZERO_VALUE);
+            assert(_name != 0,  EMPTY_STRING);
+            assert(_xp != 0, ZERO_VALUE);
             let student = Student {
                 name: _name, account: _account, age: _age, xp: _xp, is_active: _is_active
             };
