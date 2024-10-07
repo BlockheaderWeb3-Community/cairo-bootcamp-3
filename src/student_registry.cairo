@@ -7,9 +7,13 @@ trait IStudentRegistry<T> {
     fn add_student(
         ref self: T, _name: felt252, _account: ContractAddress, _age: u8, _xp: u16, _is_active: bool
     );
-
     // read-only function to get student
     fn get_student(self: @T, account: ContractAddress) -> (felt252, ContractAddress, u8, u16, bool);
+    
+    fn update_student(
+        ref self: T, _name: felt252, _account: ContractAddress, _age: u8, _xp: u16, _is_active: bool
+    );
+    fn delete_student(ref self: T, _account: ContractAddress);
 }
 
 
@@ -22,7 +26,7 @@ mod StudentRegistry {
     use starknet::storage::{
         StoragePointerReadAccess, StoragePointerWriteAccess, StoragePathEntry, Map
     };
-    use crate::errors::Errors::{NOT_ADMIN, ZERO_ADDRESS};
+    use crate::errors::Errors::{NOT_ADMIN, ZERO_ADDRESS, ZERO_VALUE, NOT_OWNER};
 
     #[storage]
     struct Storage {
@@ -51,6 +55,18 @@ mod StudentRegistry {
         ) {
             // validation to check if student account is valid address and  not a 0 address
             assert(!self.is_zero_address(_account), ZERO_ADDRESS);
+            assert(_age > 0, ZERO_VALUE);
+            let student = Student {
+                name: _name, account: _account, age: _age, xp: _xp, is_active: _is_active
+            };
+            self.students_map.entry(_account).write(student);
+        }
+
+
+        fn update_student(
+            ref self: ContractState, _name: felt252, _account: ContractAddress, _age: u8, _xp: u16, _is_active: bool
+        ) {
+            assert(!self.is_zero_address(_account), ZERO_ADDRESS);
             assert(_age > 0, 'age cannot be 0');
             let student = Student {
                 name: _name, account: _account, age: _age, xp: _xp, is_active: _is_active
@@ -67,6 +83,25 @@ mod StudentRegistry {
             let student = self.students_map.entry(account).read();
             (student.name, student.account, student.age, student.xp, student.is_active)
         }
+
+        fn delete_student(ref self: ContractState, _account: ContractAddress){
+            self.only_owner();
+
+            // let addressZero: ContractAddress = zero();
+
+            let _name = '';
+            // let _account = addressZero;
+            let _age = 0;
+            let _xp = 0;
+            let _is_active = false;
+
+
+            let student = Student {
+                name: _name, account: _account, age: _age, xp: _xp, is_active: _is_active
+            };
+            self.students_map.entry(_account).write(student);
+        }
+
     }
 
 
