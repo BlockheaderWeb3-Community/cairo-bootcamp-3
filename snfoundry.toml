@@ -8,3 +8,9 @@ url = "https://free-rpc.nethermind.io/sepolia-juno/"
 account = "deploy_dev"
 accounts-file = "~/.starknet_accounts/starknet_open_zeppelin_accounts.json"
 url = "https://free-rpc.nethermind.io/sepolia-juno/"
+
+[sncast.steph]
+account = "steph"
+accounts-file = "~/.starknet_accounts/starknet_open_zeppelin_accounts.json"
+url = "https://free-rpc.nethermind.io/sepolia-juno/"
+

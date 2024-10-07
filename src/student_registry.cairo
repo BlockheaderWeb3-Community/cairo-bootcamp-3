@@ -1,5 +1,6 @@
 use starknet::ContractAddress;
 use crate::student_struct::Student;
+use crate::events::{Event, StudentAdded};
 
 #[starknet::interface]
 trait IStudentRegistry<T> {
@@ -10,6 +11,8 @@ trait IStudentRegistry<T> {
 
     // read-only function to get student
     fn get_student(self: @T, account: ContractAddress) -> (felt252, ContractAddress, u8, u16, bool);
+
+    fn update_student(ref self: T, _name: felt252, _account: ContractAddress, _age: u8);
 }
 
 
@@ -18,11 +21,13 @@ mod StudentRegistry {
     use starknet::{ContractAddress, get_caller_address};
     use super::{IStudentRegistry, Student};
     use core::num::traits::Zero;
-  
+    #[event]
+    use crate::events::{Event, StudentAdded};
+
     use starknet::storage::{
         StoragePointerReadAccess, StoragePointerWriteAccess, StoragePathEntry, Map
     };
-    use crate::errors::Errors::{NOT_ADMIN, ZERO_ADDRESS};
+    use crate::errors::Errors::{NOT_ADMIN, ZERO_ADDRESS, EMPTY_NAME, ADMIN_NOT_ALLOWED};
 
     #[storage]
     struct Storage {
@@ -50,12 +55,16 @@ mod StudentRegistry {
             _is_active: bool
         ) {
             // validation to check if student account is valid address and  not a 0 address
+            let admin = self.admin.read();
             assert(!self.is_zero_address(_account), ZERO_ADDRESS);
+            assert(_account != admin, ADMIN_NOT_ALLOWED);
+            assert(_name != '', EMPTY_NAME);
             assert(_age > 0, 'age cannot be 0');
             let student = Student {
                 name: _name, account: _account, age: _age, xp: _xp, is_active: _is_active
             };
             self.students_map.entry(_account).write(student);
+            //TODO: student is not surposed to input _is_active
         }
 
         // read-only function to get student
@@ -67,6 +76,19 @@ mod StudentRegistry {
             let student = self.students_map.entry(account).read();
             (student.name, student.account, student.age, student.xp, student.is_active)
         }
+        
+        fn update_student(
+            ref self: ContractState,
+            _name: felt252,
+            _account: ContractAddress,
+            _age: u8,
+        )  {
+            let admin = self.admin.read();
+            assert(!self.is_zero_address(_account), ZERO_ADDRESS);
+            
+
+        }
+
     }
 
 
