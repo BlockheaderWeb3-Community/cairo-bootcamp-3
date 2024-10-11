@@ -4,3 +4,6 @@ pub mod student_registry;
 pub mod student_struct;
 pub mod errors;
 pub mod accounts;
+
+pub mod ownable_counter;
+pub mod addition;
