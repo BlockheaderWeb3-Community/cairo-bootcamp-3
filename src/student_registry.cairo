@@ -2,7 +2,7 @@ use starknet::ContractAddress;
 use crate::student_struct::Student;
 
 #[starknet::interface]
-trait IStudentRegistry<T> {
+pub trait IStudentRegistry<T> {
     // state-change function to add new student
     fn add_student(
         ref self: T, _name: felt252, _account: ContractAddress, _age: u8, _xp: u16, _is_active: bool
@@ -19,7 +19,7 @@ trait IStudentRegistry<T> {
 
 
 #[starknet::contract]
-mod StudentRegistry {
+pub mod StudentRegistry {
     use starknet::{ContractAddress, get_caller_address};
     use super::{IStudentRegistry, Student};
     use core::num::traits::Zero;

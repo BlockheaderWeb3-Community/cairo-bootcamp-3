@@ -6,6 +6,10 @@ pub mod Accounts {
         0x0000000000000000000000000000000000000000.try_into().unwrap()
     }
 
+    pub fn admin() -> ContractAddress {
+        'admin'.try_into().unwrap()
+    }
+
     pub fn owner() -> ContractAddress {
         'owner'.try_into().unwrap()
     }
