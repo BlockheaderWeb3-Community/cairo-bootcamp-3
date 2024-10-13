@@ -15,7 +15,7 @@ pub trait IOwnable<T> {
 mod OwnableCounter {
     // import ICounter trait
     use super::{ICounter, IOwnable};
-    use starknet::{ContractAddress, get_caller_address};
+    use starknet::{ContractAddress};
     use crate::addition;
 
     use core::num::traits::zero::Zero;
@@ -58,4 +58,5 @@ mod OwnableCounter {
     }
 }
 // 0x041a78e741e5af2fec34b695679bc6891742439f7afb8484ecd7766661ad02bf - UDC
+
 

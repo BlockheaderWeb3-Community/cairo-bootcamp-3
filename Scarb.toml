@@ -10,7 +10,7 @@ starknet = "^2.8.4"
 
 [dev-dependencies]
 snforge_std = { git = "https://github.com/foundry-rs/starknet-foundry", tag = "v0.31.0" }
-# assert_macros = "2.8.4"
+assert_macros = "2.8.4"
 
 [[target.starknet-contract]]
 sierra = true
