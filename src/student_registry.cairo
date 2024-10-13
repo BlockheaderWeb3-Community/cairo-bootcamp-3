@@ -135,6 +135,9 @@ pub mod StudentRegistry {
             true
         }
 
+        // Note: Deleting a student only reset's the student data to the default values.
+        // It does not remove the student account from the mapping, and therefore it does not reduce
+        // the total number of students created
         fn delete_student(ref self: ContractState, _account: ContractAddress) -> bool {
             // validation to check if account is valid
             assert(!self.is_zero_address(_account), Errors::ZERO_ADDRESS);
@@ -146,12 +149,6 @@ pub mod StudentRegistry {
             };
             // update student info
             self.students_map.entry(_account).write(deleted_student);
-
-            // decrease student's count
-            let students_count = self.total_no_of_students.read();
-            if students_count > 0 {
-                self.total_no_of_students.write(students_count - 1);
-            }
 
             true
         }
