@@ -1,21 +1,25 @@
-use starknet::ContractAddress;
 use crate::student_struct::Student;
 
 #[starknet::interface]
 pub trait IStudentRegistry<T> {
     // state-change function to add new student
     fn add_student(
-        ref self: T, _name: felt252, _account: ContractAddress, _age: u8, _xp: u16, _is_active: bool
+        ref self: T,
+        _fname: felt252,
+        _lname: felt252,
+        _phone_number: felt252,
+        _age: u8,
+        _is_active: bool
     ) -> bool;
 
     // read-only function to get student
-    fn get_student(self: @T, account: ContractAddress) -> (felt252, ContractAddress, u8, u16, bool);
+    fn get_student(self: @T, index: u64) -> (felt252, felt252, felt252, u8, bool);
     // fn get_all_students(self: @T) -> Span<Student>;
     fn get_all_students(self: @T) -> Span<Student>;
     fn update_student(
-        ref self: T, _name: felt252, _account: ContractAddress, _age: u8, _xp: u16, _is_active: bool
+        ref self: T, _index: u64, _fname: felt252, _lname: felt252, _phone_number: felt252, _age: u8
     ) -> bool;
-    fn delete_student(ref self: T, _account: ContractAddress) -> bool;
+    fn delete_student(ref self: T, _index: u64) -> bool;
 }
 
 
@@ -29,12 +33,11 @@ pub mod StudentRegistry {
         StoragePointerReadAccess, StoragePointerWriteAccess, StoragePathEntry, Map
     };
     use crate::errors::Errors;
-    use cairo_bootcamp_3::accounts::Accounts;
 
     #[storage]
     struct Storage {
         admin: ContractAddress,
-        students_map: Map::<ContractAddress, Student>,
+        students_map: Map::<u64, Student>,
         students_index: Map::<u64, ContractAddress>,
         total_no_of_students: u64
     }
@@ -52,24 +55,23 @@ pub mod StudentRegistry {
         // state-change function to add new student
         fn add_student(
             ref self: ContractState,
-            _name: felt252,
-            _account: ContractAddress,
+            _fname: felt252,
+            _lname: felt252,
+            _phone_number: felt252,
             _age: u8,
-            _xp: u16,
             _is_active: bool
         ) -> bool {
-            // validation to check if student account is valid address and  not a 0 address
-            assert(!self.is_zero_address(_account), Errors::ZERO_ADDRESS);
             assert(_age > 0, 'age cannot be 0');
             let student = Student {
-                name: _name, account: _account, age: _age, xp: _xp, is_active: _is_active
+                fname: _fname,
+                lname: _lname,
+                phone_number: _phone_number,
+                age: _age,
+                is_active: _is_active
             };
 
             // add new student to storage
-            self.students_map.entry(_account).write(student);
-
-            // keep track of the student index
-            self.students_index.entry(self.total_no_of_students.read()).write(_account);
+            self.students_map.entry(self.total_no_of_students.read() + 1).write(student);
 
             // increase student's count
             self.total_no_of_students.write(self.total_no_of_students.read() + 1);
@@ -78,13 +80,9 @@ pub mod StudentRegistry {
         }
 
         // read-only function to get student
-        fn get_student(
-            self: @ContractState, account: ContractAddress
-        ) -> (felt252, ContractAddress, u8, u16, bool) {
-            // validation to check if account is valid
-            assert(!self.is_zero_address(account), Errors::ZERO_ADDRESS);
-            let student = self.students_map.entry(account).read();
-            (student.name, student.account, student.age, student.xp, student.is_active)
+        fn get_student(self: @ContractState, index: u64) -> (felt252, felt252, felt252, u8, bool) {
+            let student = self.students_map.entry(index).read();
+            (student.fname, student.lname, student.phone_number, student.age, student.is_active)
         }
 
         fn get_all_students(self: @ContractState) -> Span<Student> {
@@ -93,21 +91,18 @@ pub mod StudentRegistry {
             // total number of students
             let students_count = self.total_no_of_students.read();
             // counter
-            let mut i = 0;
+            let mut i = 1;
 
             // loop through all the students that have been created and return only the ones that
             // have not been deleted (only active students)
-            while i < students_count {
-                let current_student_account = self.students_index.read(i);
-                let current_student_data: Student = self
-                    .students_map
-                    .entry(current_student_account)
-                    .read();
-
+            while i < students_count + 1 {
+                let current_student_data = self.students_map.entry(i).read();
                 // return only active students
                 if current_student_data.is_active {
                     all_students.append(current_student_data)
                 };
+
+                i += 1;
             };
 
             all_students.span()
@@ -115,22 +110,24 @@ pub mod StudentRegistry {
 
         fn update_student(
             ref self: ContractState,
-            _name: felt252,
-            _account: ContractAddress,
+            _index: u64,
+            _fname: felt252,
+            _lname: felt252,
+            _phone_number: felt252,
             _age: u8,
-            _xp: u16,
-            _is_active: bool
         ) -> bool {
-            // validation to check if account is valid
-            assert(!self.is_zero_address(_account), Errors::ZERO_ADDRESS);
-            let old_student: Student = self.students_map.entry(_account).read();
+            let old_student: Student = self.students_map.entry(_index).read();
             // validation to check if student exist
             assert(old_student.age > 0, Errors::STUDENT_NOT_REGISTERED);
             let new_student = Student {
-                name: _name, account: _account, age: _age, xp: _xp, is_active: _is_active
+                fname: _fname,
+                lname: _lname,
+                phone_number: _phone_number,
+                age: _age,
+                is_active: old_student.is_active
             };
             // update student info
-            self.students_map.entry(_account).write(new_student);
+            self.students_map.entry(_index).write(new_student);
 
             true
         }
@@ -138,17 +135,15 @@ pub mod StudentRegistry {
         // Note: Deleting a student only reset's the student data to the default values.
         // It does not remove the student account from the mapping, and therefore it does not reduce
         // the total number of students created
-        fn delete_student(ref self: ContractState, _account: ContractAddress) -> bool {
-            // validation to check if account is valid
-            assert(!self.is_zero_address(_account), Errors::ZERO_ADDRESS);
-            let student: Student = self.students_map.entry(_account).read();
+        fn delete_student(ref self: ContractState, _index: u64) -> bool {
+            let student: Student = self.students_map.entry(_index).read();
             // validation to check if student exist
             assert(student.age > 0, Errors::STUDENT_NOT_REGISTERED);
             let deleted_student = Student {
-                name: 0, account: Accounts::zero(), age: 0, xp: 0, is_active: false
+                lname: 0, fname: 0, phone_number: 0, age: 0, is_active: false
             };
             // update student info
-            self.students_map.entry(_account).write(deleted_student);
+            self.students_map.entry(_index).write(deleted_student);
 
             true
         }
