@@ -7,7 +7,6 @@ use cairo_bootcamp_3::student_registry::{
 };
 
 pub mod Accounts {
-
     use starknet::ContractAddress;
     use core::traits::TryInto;
 

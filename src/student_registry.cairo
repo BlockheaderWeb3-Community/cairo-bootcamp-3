@@ -156,7 +156,6 @@ pub mod StudentRegistry {
         }
 
         fn get_admin(self: @ContractState) -> ContractAddress {
-            
             self.admin.read()
         }
     }

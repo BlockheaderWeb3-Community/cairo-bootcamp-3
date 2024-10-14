@@ -2,8 +2,8 @@ use snforge_std::{declare, ContractClassTrait, DeclareResultTrait};
 use starknet::{ContractAddress};
 use cairo_bootcamp_3::ownable_counter::{
     IOwnableDispatcher, IOwnableSafeDispatcher, IOwnableDispatcherTrait,
-    IOwnableSafeDispatcherTrait, ICounterDispatcher, ICounterSafeDispatcher, ICounterDispatcherTrait,
-    ICounterSafeDispatcherTrait
+    IOwnableSafeDispatcherTrait, ICounterDispatcher, ICounterSafeDispatcher,
+    ICounterDispatcherTrait, ICounterSafeDispatcherTrait
 };
 
 pub mod Accounts {
@@ -12,7 +12,7 @@ pub mod Accounts {
 
     pub fn zero() -> ContractAddress {
         0x0000000000000000000000000000000000000000.try_into().unwrap()
-    }    
+    }
 
     pub fn owner() -> ContractAddress {
         'owner'.try_into().unwrap()
@@ -87,7 +87,6 @@ fn test_increase_count() {
 }
 
 
-
 #[test]
 fn test_get_count() {
     let contract_address = deploy("OwnableCounter");
@@ -97,5 +96,4 @@ fn test_get_count() {
     counter_dispatcher.increase_count(10);
 
     assert(counter_dispatcher.get_count() == 10, 'Count not set correctly');
-
 }
