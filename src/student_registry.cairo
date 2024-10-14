@@ -3,22 +3,25 @@ use crate::student_struct::Student;
 
 #[starknet::interface]
 pub trait IStudentRegistry<T> {
-    // state-change function to add new student
+    // state-changing function to add new student
     fn add_student(
         ref self: T, _name: felt252, _account: ContractAddress, _age: u8, _xp: u16, _is_active: bool
     ) -> bool;
 
     // read-only function to get student
     fn get_student(self: @T, account: ContractAddress) -> (felt252, ContractAddress, u8, u16, bool);
-    // fn get_all_students(self: @T) -> Span<Student>;
+
+    // state-changing function to update a student
     fn update_student(
         ref self: T, _name: felt252, _account: ContractAddress, _age: u8, _xp: u16, _is_active: bool
     ) -> bool;
+
+    // state-changing function to delete a student
     fn delete_student(ref self: T, _account: ContractAddress) -> bool;
 }
 
 
-#[starknet::component]
+#[starknet::component] // this attribute specifies that this module is a component
 pub mod StudentRegistryComponent {
     use OwnableComponent::InternalTrait;
     use starknet::{ContractAddress};
@@ -42,7 +45,9 @@ pub mod StudentRegistryComponent {
     #[event]
     #[derive(Drop, starknet::Event)]
     pub enum Event {
-        StudentAdded: StudentAdded
+        StudentAdded: StudentAdded,
+        StudentUpdated: StudentUpdated,
+        StudentDeleted: StudentDeleted
     }
 
     #[derive(Drop, starknet::Event)]
@@ -50,14 +55,26 @@ pub mod StudentRegistryComponent {
         new_student: Student,
     }
 
-    #[embeddable_as(StudentRegistry)]
+    #[derive(Drop, starknet::Event)]
+    struct StudentUpdated {
+        student: Student,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct StudentDeleted {
+        student: Student,
+    }
+
+    #[embeddable_as(
+        StudentRegistry
+    )] // this attribure specifies that this implementation block can be embedded in a contract as 'StudentRegistry'
     impl StudentRegistryImpl<
         TContractState,
         +HasComponent<TContractState>,
         +Drop<TContractState>,
         impl Ownable: OwnableComponent::HasComponent<TContractState>
     > of IStudentRegistry<ComponentState<TContractState>> {
-        // state-change function to add new student
+        // state-chang function to add new student
         fn add_student(
             ref self: ComponentState<TContractState>,
             _name: felt252,
@@ -93,6 +110,7 @@ pub mod StudentRegistryComponent {
             (student.name, student.account, student.age, student.xp, student.is_active)
         }
 
+        // state-changing function to update a student
         fn update_student(
             ref self: ComponentState<TContractState>,
             _name: felt252,
@@ -110,11 +128,14 @@ pub mod StudentRegistryComponent {
                 name: _name, account: _account, age: _age, xp: _xp, is_active: _is_active
             };
             // update student info
-            self.students_map.entry(_account).write(new_student);
+            self.students_map.entry(_account).write(new_student.clone());
+
+            self.emit(StudentUpdated { student: new_student });
 
             true
         }
 
+        // state-changing function to delete a student
         fn delete_student(
             ref self: ComponentState<TContractState>, _account: ContractAddress
         ) -> bool {
@@ -127,7 +148,10 @@ pub mod StudentRegistryComponent {
                 name: 0, account: Accounts::zero(), age: 0, xp: 0, is_active: false
             };
             // update student info
-            self.students_map.entry(_account).write(new_student);
+            self.students_map.entry(_account).write(new_student.clone());
+
+            self.emit(StudentDeleted { student: new_student });
+
             true
         }
     }
