@@ -1,5 +1,5 @@
 export default function Balance() {
-  // TODO - Fetch connected user's balance
+  // TODO: - Fetch connected user's balance
 
   return (
     <div className="flex gap-x-3 items-center text-[#6F6F6F] text-base leading-6">
