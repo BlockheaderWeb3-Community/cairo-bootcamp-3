@@ -7,3 +7,5 @@ pub mod accounts;
 
 pub mod ownable_counter;
 pub mod addition;
+
+pub mod class_manager;
