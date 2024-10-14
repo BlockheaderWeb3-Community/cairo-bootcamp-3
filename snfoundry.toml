@@ -1,0 +1,10 @@
+[sncast.cohort_dev]
+account = "cohort_dev"
+accounts-file = "~/.starknet_accounts/starknet_open_zeppelin_accounts.json"
+url = "https://free-rpc.nethermind.io/sepolia-juno/"
+
+
+[sncast.deploy_dev]
+account = "deploy_dev"
+accounts-file = "~/.starknet_accounts/starknet_open_zeppelin_accounts.json"
+url = "https://free-rpc.nethermind.io/sepolia-juno/"

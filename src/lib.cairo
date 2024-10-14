@@ -1,4 +1,11 @@
+pub mod counter_v1;
+pub mod counter_v2;
+pub mod student_registry;
+pub mod student_struct;
+pub mod errors;
+pub mod accounts;
 
+<<<<<<< HEAD
 mod sum;
 mod subtraction;
 mod division;
@@ -19,3 +26,7 @@ fn main() {
     println!("The division result is {}", res_div);
     println!("The multiplication result is {}", res_mult);
 }
+=======
+pub mod ownable_counter;
+pub mod addition;
+>>>>>>> refs/remotes/origin/main
