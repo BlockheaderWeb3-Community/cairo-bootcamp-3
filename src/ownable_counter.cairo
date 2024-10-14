@@ -28,7 +28,7 @@ mod OwnableCounter {
 
     #[constructor]
     fn constructor(ref self: ContractState, new_owner: ContractAddress) {
-        assert(new_owner.is_non_zero(), '');
+        assert(new_owner.is_non_zero(), '0 address');
         self.owner.write(new_owner)
     }
 
@@ -49,6 +49,7 @@ mod OwnableCounter {
     #[abi(embed_v0)]
     impl OwableImpl of IOwnable<ContractState> {
         fn add_owner(ref self: ContractState, new_owner: ContractAddress) {
+            assert(new_owner.is_non_zero(), '0 address');
             self.owner.write(new_owner)
         }
 

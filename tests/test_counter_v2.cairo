@@ -4,7 +4,6 @@ use cairo_bootcamp_3::counter_v2::{
     ICounterV2Dispatcher, ICounterV2SafeDispatcher, ICounterV2DispatcherTrait,
     ICounterV2SafeDispatcherTrait
 };
-
 pub mod Accounts {
     use starknet::ContractAddress;
     use core::traits::TryInto;

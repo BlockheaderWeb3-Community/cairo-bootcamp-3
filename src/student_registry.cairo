@@ -16,6 +16,8 @@ pub trait IStudentRegistry<T> {
         ref self: T, _name: felt252, _account: ContractAddress, _age: u8, _xp: u16, _is_active: bool
     ) -> bool;
     fn delete_student(ref self: T, _account: ContractAddress) -> bool;
+
+    fn get_admin(self: @T) -> ContractAddress;
 }
 
 
@@ -151,6 +153,11 @@ pub mod StudentRegistry {
             self.students_map.entry(_account).write(deleted_student);
 
             true
+        }
+
+        fn get_admin(self: @ContractState) -> ContractAddress {
+            
+            self.admin.read()
         }
     }
 
