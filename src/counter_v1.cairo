@@ -4,7 +4,7 @@
 //  - impl block
 
 #[starknet::interface]
-trait ICounter<TContractState> {
+pub trait ICounter<TContractState> {
     // get count - retrieve the count from storage
     // a read-only function
     fn get_count(self: @TContractState) -> u32;
@@ -15,7 +15,7 @@ trait ICounter<TContractState> {
 
 
 #[starknet::contract]
-mod Counter {
+pub mod Counter {
     #[storage]
     struct Storage {
         count: u32,

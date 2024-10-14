@@ -5,7 +5,7 @@
 
 use starknet::ContractAddress;
 #[starknet::interface]
-trait ICounterV2<TContractState> {
+pub trait ICounterV2<TContractState> {
     // get count - retrieve the count from storage
     // a read-only function
     fn get_count(self: @TContractState) -> u32;
@@ -25,7 +25,7 @@ trait ICounterV2<TContractState> {
 
 
 #[starknet::contract]
-mod CounterV2 {
+pub mod CounterV2 {
     use core::num::traits::Zero;
     use super::ICounterV2;
     use starknet::{ContractAddress, get_caller_address};
