@@ -1,15 +1,9 @@
-mod intro_to_felt;
-mod intro_to_u8;
-mod intro_to_u16;
-mod intro_to_bytearray;
-mod is_odd;
-pub mod utils;
+pub mod counter_v1;
+pub mod counter_v2;
+pub mod student_registry;
+pub mod student_struct;
+pub mod errors;
+pub mod accounts;
 
-fn main() {
-    intro_to_felt::run();
-    intro_to_u8::run(5, 5);
-    intro_to_u16::run(5, 5);
-    intro_to_bytearray::run();
-    is_odd::run(5);
-}
-
+pub mod ownable_counter;
+pub mod addition;
