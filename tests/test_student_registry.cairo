@@ -136,5 +136,4 @@ fn test_delete_student() {
     assert(age == 0, 'Age not zeroed');
     assert(xp == 0, 'XP not zeroed');
     assert(active == false, 'status not zeroed');
-    
 }
