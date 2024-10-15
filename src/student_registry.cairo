@@ -60,7 +60,14 @@ pub mod StudentRegistry {
         ) -> bool {
             // validation to check if student account is valid address and  not a 0 address
             assert(!self.is_zero_address(_account), Errors::ZERO_ADDRESS);
-            assert(_age > 0, 'age cannot be 0');
+            assert(_age > 0, Errors::AGE_ZERO);
+              // validation to check that the admin is not registering as a student
+            let current_admin = self.admin.read();
+            assert(_account != current_admin, Errors::ADMIN_CANNOT_BE_STUDENT);
+
+            // check if the student is already registered
+            let existing_student: Student = self.students_map.entry(_account).read();
+            assert(existing_student.age == 0, Errors::STUDENT_ALREADY_REGISTERED);
             let student = Student {
                 name: _name, account: _account, age: _age, xp: _xp, is_active: _is_active
             };
