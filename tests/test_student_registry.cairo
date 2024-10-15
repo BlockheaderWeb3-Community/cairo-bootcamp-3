@@ -53,10 +53,18 @@ fn test_add_student() {
     let student_registry_dispatcher = IStudentRegistryDispatcher { contract_address };
 
     let account1 = Accounts::account1();
-    let account2 = Accounts::account2();
 
     student_registry_dispatcher.add_student('JK', account1, 20, 100, true);
-    student_registry_dispatcher.add_student('Jane', account2, 21, 101, true);
+
+    let student1 = student_registry_dispatcher.get_student(account1);
+
+    let (name, account, age, xp, active) = student1;
+
+    assert(name == 'JK', 'Name was not set correctly');
+    assert(account == account1, 'Account was not set correctly');
+    assert(age == 20, 'Age was not set correctly');
+    assert(xp == 100, 'XP was not set correctly');
+    assert(active == true, 'status was not set correctly');
 }
 
 #[test]
@@ -70,8 +78,6 @@ fn test_get_student() {
     student_registry_dispatcher.add_student('John', account1, 20, 100, true);
 
     let student1 = student_registry_dispatcher.get_student(account1);
-
-    // println!("Student 1: {:?}", student1);
 
     let (name, account, age, xp, active) = student1;
 
@@ -92,9 +98,19 @@ fn test_update_student() {
 
     student_registry_dispatcher.add_student('John', account1, 20, 100, true);
 
-    let student1 = student_registry_dispatcher.update_student('Jane', account1, 21, 101, false);
+    let result = student_registry_dispatcher.update_student('Jane', account1, 21, 101, false);
 
-    assert(student1 == true, 'Student updated failed');
+    assert(result == true, 'Student update failed');
+
+    let student1 = student_registry_dispatcher.get_student(account1);
+
+    let (name, account, age, xp, active) = student1;
+
+    assert(name == 'Jane', 'Name was not set correctly');
+    assert(account == account1, 'Account was not set correctly');
+    assert(age == 21, 'Age was not set correctly');
+    assert(xp == 101, 'XP was not set correctly');
+    assert(active == false, 'status was not set correctly');
 }
 
 #[test]
@@ -109,5 +125,16 @@ fn test_delete_student() {
 
     let student1 = student_registry_dispatcher.delete_student(account1);
 
-    assert(student1 == true, 'Student deleted failed');
+    assert(student1 == true, 'Student deletion failed');
+
+    let student1 = student_registry_dispatcher.get_student(account1);
+
+    let (name, account, age, xp, active) = student1;
+
+    assert(name == 0, 'Name not zeroed');
+    assert(account == Accounts::zero(), 'Account not zeroed');
+    assert(age == 0, 'Age not zeroed');
+    assert(xp == 0, 'XP not zeroed');
+    assert(active == false, 'status not zeroed');
+    
 }
