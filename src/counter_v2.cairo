@@ -29,6 +29,9 @@ pub mod CounterV2 {
     use core::num::traits::Zero;
     use super::ICounterV2;
     use starknet::{ContractAddress, get_caller_address};
+
+    use crate::errors::Errors::{NOT_ADMIN, ZERO_ADDRESS, CALLER NOT OWNER};
+
     #[storage]
     struct Storage {
         count: u32,
@@ -38,7 +41,7 @@ pub mod CounterV2 {
     #[constructor]
     fn constructor(ref self: ContractState, _owner: ContractAddress) {
         // validation to check if owner is valid address and 0 address
-        assert(self.is_zero_address(_owner) == false, '0 address');
+        assert(self.is_zero_address(_owner) == false, ZERO_ADDRESS);
         self.owner.write(_owner);
     }
 
@@ -58,7 +61,7 @@ pub mod CounterV2 {
             self.only_owner();
 
             // validation to check if new owner is 0 address
-            assert(self.is_zero_address(new_owner) == false, '0 address');
+            assert(self.is_zero_address(new_owner) == false, ZERO_ADDRESS);
             // assert that new owner is not the current owner
             assert(self.get_current_owner() != new_owner, 'same owner');
 
@@ -88,7 +91,7 @@ pub mod CounterV2 {
             let current_owner: ContractAddress = self.owner.read();
 
             // assertion logic
-            assert(caller == current_owner, 'caller not owner');
+            assert(caller == current_owner, CALLER NOT OWNER);
         }
 
 
