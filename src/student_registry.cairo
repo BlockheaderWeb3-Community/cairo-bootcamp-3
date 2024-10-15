@@ -15,7 +15,6 @@ pub trait IStudentRegistry<T> {
     fn update_student(
         ref self: T, _name: felt252, _account: ContractAddress, _age: u8, _xp: u16, _is_active: bool
     ) -> bool;
-    fn delete_student(ref self: T, _account: ContractAddress) -> bool;
 }
 
 
@@ -26,15 +25,16 @@ pub mod StudentRegistry {
     use core::num::traits::Zero;
 
     use starknet::storage::{
-        StoragePointerReadAccess, StoragePointerWriteAccess, StoragePathEntry, Map
+        StoragePointerReadAccess, StoragePointerWriteAccess, Vec, VecTrait, MutableVecTrait,
+        StoragePathEntry, Map
     };
     use crate::errors::Errors;
-    use cairo_bootcamp_3::accounts::Accounts;
 
     #[storage]
     struct Storage {
         admin: ContractAddress,
         students_map: Map::<ContractAddress, Student>,
+        students_vector: Vec<ContractAddress>,
         students_index: Map::<u64, ContractAddress>,
         total_no_of_students: u64
     }
@@ -68,6 +68,9 @@ pub mod StudentRegistry {
             // add new student to storage
             self.students_map.entry(_account).write(student);
 
+            // keep track of student's account address
+            self.students_vector.append().write(_account);
+
             // keep track of the student index
             self.students_index.entry(self.total_no_of_students.read()).write(_account);
 
@@ -90,25 +93,19 @@ pub mod StudentRegistry {
         fn get_all_students(self: @ContractState) -> Span<Student> {
             // empty array to store students
             let mut all_students: Array<Student> = array![];
-            // total number of students
-            let students_count = self.total_no_of_students.read();
-            // counter
-            let mut i = 0;
 
-            // loop through all the students that have been created and return only the ones that
-            // have not been deleted (only active students)
-            while i < students_count {
-                let current_student_account = self.students_index.read(i);
-                let current_student_data: Student = self
-                    .students_map
-                    .entry(current_student_account)
-                    .read();
-
-                // return only active students
-                if current_student_data.is_active {
-                    all_students.append(current_student_data)
-                };
-            };
+            // loop through the students vector containing the accounts of the student and use the
+            // account to get and return the student details
+            for i in 0
+                ..self
+                    .students_vector
+                    .len() {
+                        // append each student details to the students array
+                        all_students
+                            .append(
+                                self.students_map.entry(self.students_vector.at(i).read()).read()
+                            );
+                    };
 
             all_students.span()
         }
@@ -131,24 +128,6 @@ pub mod StudentRegistry {
             };
             // update student info
             self.students_map.entry(_account).write(new_student);
-
-            true
-        }
-
-        // Note: Deleting a student only reset's the student data to the default values.
-        // It does not remove the student account from the mapping, and therefore it does not reduce
-        // the total number of students created
-        fn delete_student(ref self: ContractState, _account: ContractAddress) -> bool {
-            // validation to check if account is valid
-            assert(!self.is_zero_address(_account), Errors::ZERO_ADDRESS);
-            let student: Student = self.students_map.entry(_account).read();
-            // validation to check if student exist
-            assert(student.age > 0, Errors::STUDENT_NOT_REGISTERED);
-            let deleted_student = Student {
-                name: 0, account: Accounts::zero(), age: 0, xp: 0, is_active: false
-            };
-            // update student info
-            self.students_map.entry(_account).write(deleted_student);
 
             true
         }
