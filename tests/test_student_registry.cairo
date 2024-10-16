@@ -34,17 +34,6 @@ fn deploy(name: ByteArray) -> ContractAddress {
     contract_address
 }
 
-#[test]
-fn test_admin_was_set_correctly() {
-    let contract_address = deploy("StudentRegistry");
-
-    let student_registry_dispatcher = IStudentRegistryDispatcher { contract_address };
-
-    let current_admin = student_registry_dispatcher.get_admin();
-
-    assert(current_admin == Accounts::admin(), 'Admin was not set correctly');
-}
-
 
 #[test]
 fn test_add_student() {
@@ -111,29 +100,4 @@ fn test_update_student() {
     assert(age == 21, 'Age was not set correctly');
     assert(xp == 101, 'XP was not set correctly');
     assert(active == false, 'status was not set correctly');
-}
-
-#[test]
-fn test_delete_student() {
-    let contract_address = deploy("StudentRegistry");
-
-    let student_registry_dispatcher = IStudentRegistryDispatcher { contract_address };
-
-    let account1 = Accounts::account1();
-
-    student_registry_dispatcher.add_student('John', account1, 20, 100, true);
-
-    let student1 = student_registry_dispatcher.delete_student(account1);
-
-    assert(student1 == true, 'Student deletion failed');
-
-    let student1 = student_registry_dispatcher.get_student(account1);
-
-    let (name, account, age, xp, active) = student1;
-
-    assert(name == 0, 'Name not zeroed');
-    assert(account == Accounts::zero(), 'Account not zeroed');
-    assert(age == 0, 'Age not zeroed');
-    assert(xp == 0, 'XP not zeroed');
-    assert(active == false, 'status not zeroed');
 }

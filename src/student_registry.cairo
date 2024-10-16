@@ -15,7 +15,6 @@ pub trait IStudentRegistry<T> {
     fn update_student(
         ref self: T, _name: felt252, _account: ContractAddress, _age: u8, _xp: u16, _is_active: bool
     ) -> bool;
-
 }
 
 
@@ -132,24 +131,6 @@ pub mod StudentRegistry {
 
             true
         }
-
-        // Note: Deleting a student only reset's the student data to the default values.
-        // It does not remove the student account from the mapping, and therefore it does not reduce
-        // the total number of students created
-        // fn delete_student(ref self: ContractState, _account: ContractAddress) -> bool {
-        //     // validation to check if account is valid
-        //     assert(!self.is_zero_address(_account), Errors::ZERO_ADDRESS);
-        //     let student: Student = self.students_map.entry(_account).read();
-        //     // validation to check if student exist
-        //     assert(student.age > 0, Errors::STUDENT_NOT_REGISTERED);
-        //     let deleted_student = Student {
-        //         name: 0, account: Accounts::zero(), age: 0, xp: 0, is_active: false
-        //     };
-        //     // update student info
-        //     self.students_map.entry(_account).write(deleted_student);
-
-        //     true
-        // }
     }
 
 
