@@ -18,7 +18,7 @@ mod StudentRegistry {
     use starknet::{ContractAddress, get_caller_address};
     use super::{IStudentRegistry, Student};
     use core::num::traits::Zero;
-  
+
     use starknet::storage::{
         StoragePointerReadAccess, StoragePointerWriteAccess, StoragePathEntry, Map
     };
