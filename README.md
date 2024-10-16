@@ -58,7 +58,7 @@ snforge test
 > Uses `scarb` to build contracts first, then proceed to run tests using `snforge`
 - Filter tests
 ```bash
-snforge test test_increase_
+snforge test test_increase
 ```
 - Run specific tests
 ```bash
