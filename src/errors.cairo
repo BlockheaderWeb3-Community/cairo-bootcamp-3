@@ -1,4 +1,5 @@
 pub mod Errors {
+    pub const ZERO_AMOUNT: felt252 = 'amount cannot be zero';
     pub const NOT_OWNER: felt252 = 'CALLER NOT OWNER';
     pub const NOT_ADMIN: felt252 = 'CALLER NOT ADMIN';
     pub const ZERO_ADDRESS: felt252 = 'ZERO ADDRESS!';
