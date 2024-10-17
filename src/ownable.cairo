@@ -47,9 +47,10 @@ mod Ownable {
 
 // 0x6331d7d1cb9bc762785d083570d0d594fcf57cf3e5384209b59435c3f7e6d8b -- justice
 
-
-
-//__________________________________TODAY_______________________ 
+//__________________________________TODAY_______________________
 // 0xdedef0be763547e8e505d12fac321d0de4e9bd51635ac5fa00ae61d12e463e
 // 0x6f2f6eb269f9741d5bb9cb633bfb632a0d71e0622b195ef4c4e66e8f1fee9fe - deploy_dev account
 // 0x2a601649affa4fb870f919058baeed96729b1d7be7282b978e5ba50852d7c77 - ownable ca
+
+/// 0x00dedef0be763547e8e505d12fac321d0de4e9bd51635ac5fa00ae61d12e463e class - hash
+

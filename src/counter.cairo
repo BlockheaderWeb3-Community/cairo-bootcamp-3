@@ -28,7 +28,10 @@ mod Counter {
         }
     }
 }
-// 0x0726aae552474f128529c982392e8490c496395c1a2d7879c029203ad12e97bb
+// 0x0128fe1941a77f17abba960d33e491036cb7c607b23cbbc49abecda8e80fc3c1 --- class hash
 
-//__________________________________TODAY_______________________ 
-// 0x45f8e8b3d6ecf220d78fdc13a523ae8ecaa90581ee68baa958d8ba3181841e9 - counter ca
+/// 0x66043c0e51ad08ee2d9861a66c15de5b78ca483f5b211b5437a4c4c9fd4e3eb -- cohort_dev address
+//__________________________________TODAY_______________________
+// 0x20345aad7d3082f69cfda059f8e06d031a912107478fbc68df5dad4298bc8f1 - counter ca
+
+
