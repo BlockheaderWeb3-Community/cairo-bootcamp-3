@@ -10,4 +10,5 @@ pub mod ownable_counter;
 pub mod ownable;
 pub mod addition;
 pub mod aggregator;
+pub mod killswitch;
 
