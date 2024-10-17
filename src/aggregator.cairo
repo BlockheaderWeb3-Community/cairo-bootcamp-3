@@ -21,7 +21,7 @@ pub trait IAggregator<T> {
 }
 
 #[starknet::contract]
-mod Aggregator {
+pub mod Aggregator {
     use cairo_bootcamp_3::{
         counter::{ICounterDispatcher, ICounterDispatcherTrait},
         ownable::{IOwnableDispatcher, IOwnableDispatcherTrait},
@@ -97,5 +97,4 @@ mod Aggregator {
         }
     }
 }
-
 
