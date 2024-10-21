@@ -11,7 +11,6 @@ pub trait IVulnerableToken<T> {
 
 #[starknet::contract]
 mod VulnerableToken {
-    use starknet::ContractAddress;
     const MINT_AMOUNT: u256 = 1000;
 
     #[storage]
