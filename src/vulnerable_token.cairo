@@ -1,7 +1,10 @@
-// NB 
+// NB
 // this is not an ERC-20 token contract as it doesn't implement the ERC-20 standard
-// This minimalistic VulnerableToken contract is a token contract whose `mint_token` method lacks the requisite access control to for the execution of critical operations like minting/burning of tokens; in our case here, we are targetting the increase total supply operation of the contract.
-// It is being used here to showcase the security vulnerability of exposing critical functions without access control
+// This minimalistic VulnerableToken contract is a token contract whose `mint_token` method lacks
+// the requisite access control to for the execution of critical operations like minting/burning of
+// tokens; in our case here, we are targetting the increase total supply operation of the contract.
+// It is being used here to showcase the security vulnerability of exposing critical functions
+// without access control
 
 #[starknet::interface]
 pub trait IVulnerableToken<T> {
@@ -10,7 +13,7 @@ pub trait IVulnerableToken<T> {
 }
 
 #[starknet::contract]
-mod VulnerableToken {
+pub mod VulnerableToken {
     const MINT_AMOUNT: u256 = 1000;
 
     #[storage]
