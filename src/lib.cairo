@@ -12,4 +12,5 @@ pub mod addition;
 pub mod aggregator;
 pub mod vulnerable_token;
 pub mod vulnerable_stake;
+pub mod attack_counter;
 

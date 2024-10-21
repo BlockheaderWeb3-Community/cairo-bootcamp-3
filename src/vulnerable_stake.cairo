@@ -1,3 +1,5 @@
+// VulnerableStake contract
+// Both deposit and withdraw functions of this contract contains flawed logic
 use starknet::ContractAddress;
 #[starknet::interface]
 pub trait IVulnerableStake<T> {
