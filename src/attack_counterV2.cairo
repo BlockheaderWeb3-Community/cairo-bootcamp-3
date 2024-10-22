@@ -1,5 +1,5 @@
 #[starknet::interface]
-pub trait ICounter<T> {
+pub trait IAttackCounterv2<T> {
     fn counter_get_count(self: @T) -> u32;
     fn counter_get_current_owner(self: @T) -> ContractAddress;
 
@@ -23,7 +23,7 @@ pub mod AttackCounterV2 {
     }
 
     #[abi(embed_v0)]
-    impl ICounterImpl of super::ICounter<ContractState> {
+    impl ICounterImpl of super::IAttackCounterv2<ContractState> {
         fn counter_get_count(self: @ContractState) -> u32 {
             let counter_addr = self.counter_address.read();
             ICounterV2Dispatcher { contract_address: counter_addr }.get_count()
