@@ -20,6 +20,9 @@ pub mod Accounts {
     pub fn account1() -> ContractAddress {
         'account1'.try_into().unwrap()
     }
+    pub fn account2() -> ContractAddress {
+        'account2'.try_into().unwrap()
+    }
 }
 
 // Deploys the given contract and returns the corresponding contract address
@@ -60,3 +63,37 @@ fn test_attack_counter_set_count() {
     assert_eq!(count_3, 10);
 }
 
+#[test]
+fn test_attack_counter_add_new_owner() {
+    let mut counterV2_calldata: Array<felt252> = array![Accounts::owner().into()];
+    let counterV2_contract_address: ContractAddress = deploy_util("CounterV2", counterV2_calldata);
+    let counter_instance = ICounterV2Dispatcher { contract_address: counterV2_contract_address };
+
+    let owner_1 = counter_instance.get_current_owner();
+    println!("owner_1____{:?}", owner_1);
+    assert_eq!(owner_1, Accounts::owner().into());
+
+    let mut attacker_calldata: Array<felt252> = array![];
+    counterV2_contract_address.serialize(ref attacker_calldata);
+
+    let attack_counter_address: ContractAddress = deploy_util("AttackCounterV2", attacker_calldata);
+    let attacker_instance = IAttackCounterv2Dispatcher { contract_address: attack_counter_address };
+
+    attacker_instance.attack_counter_add_new_owner(Accounts::account1().into());
+
+    let owner_2 = counter_instance.get_current_owner();
+    println!("owner_2____{:?}", owner_2);
+    assert_eq!(owner_2, Accounts::account1().into());
+
+    assert_eq!(owner_2, attacker_instance.counter_get_current_owner());
+
+    attacker_instance.attack_counter_add_new_owner(Accounts::account2().into());
+
+    let owner_3 = counter_instance.get_current_owner();
+    println!("owner_3____{:?}", owner_2);
+    assert_eq!(owner_3, Accounts::account2().into());
+
+    assert_eq!(owner_3, attacker_instance.counter_get_current_owner());
+
+
+}
