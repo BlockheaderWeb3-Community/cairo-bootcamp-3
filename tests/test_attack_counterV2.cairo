@@ -30,7 +30,7 @@ fn deploy_util(contract_name: ByteArray, constructor_calldata: Array<felt252>) -
 }
 
 #[test]
-fn test_can_attacker_counter_count() {
+fn test_attack_counter_set_count() {
 
     let mut counterV2_calldata: Array<felt252> = array![Accounts::owner().into()];
     let counterV2_contract_address: ContractAddress = deploy_util("CounterV2", counterV2_calldata);
