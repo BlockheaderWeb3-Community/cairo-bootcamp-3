@@ -55,7 +55,7 @@ pub mod CounterV2 {
 
         fn add_new_owner(ref self: ContractState, new_owner: ContractAddress) {
             // validation to ensure only owner can invoke this function
-            self.only_owner();
+            // self.only_owner(); // commentted out this line to execute sys calls
 
             // validation to check if new owner is 0 address
             assert(self.is_zero_address(new_owner) == false, '0 address');

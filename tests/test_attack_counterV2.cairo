@@ -1,4 +1,6 @@
-use snforge_std::{declare, ContractClassTrait, DeclareResultTrait};
+use snforge_std::{declare, ContractClassTrait, DeclareResultTrait, start_cheat_caller_address};
+use using_cheatcodes::{ICheatcodeCheckerDispatcher, ICheatcodeCheckerDispatcherTrait};
+
 use starknet::{ContractAddress};
 use cairo_bootcamp_3::{
     counter_v2::{ICounterV2Dispatcher, ICounterV2DispatcherTrait},
