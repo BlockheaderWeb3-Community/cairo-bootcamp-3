@@ -5,6 +5,7 @@ pub trait IAttackCounterv2<T> {
 
     fn attack_counter_add_new_owner(self: @T, new_owner: ContractAddress);
     fn attack_counter_set_count(self: @T, amount: u32);
+    fn attack_counter_increase_count_by_one(self: @T);
 }
 use starknet::{ContractAddress, syscalls::call_contract_syscall};
 
@@ -49,6 +50,16 @@ pub mod AttackCounterV2 {
 
             call_contract_syscall(counter_addr, selector, args.span());
         }
+
+        fn attack_counter_increase_count_by_one(self: @ContractState) {
+            let counter_addr = self.counter_address.read();
+            let selector = selector!("increase_count_by_one");
+            
+            let mut args: Array<felt252> = array![];            
+
+            call_contract_syscall(counter_addr, selector, args.span());
+        }
+
 
         fn counter_get_current_owner(self: @ContractState) -> ContractAddress {
             let counter_addr = self.counter_address.read();
