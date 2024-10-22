@@ -18,7 +18,7 @@ pub struct StakerInfo {
 
 
 #[starknet::contract]
-mod VulnerableStake {
+pub mod VulnerableStake {
     use starknet::{ContractAddress, get_caller_address};
     use starknet::storage::{StoragePointerWriteAccess, StoragePathEntry, Map};
     use super::{StakerInfo, IVulnerableStake,};
