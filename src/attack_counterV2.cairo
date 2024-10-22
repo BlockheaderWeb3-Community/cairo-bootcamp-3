@@ -8,9 +8,10 @@ pub trait IAttackCounterv2<T> {
     fn attack_counter_increase_count_by_one(self: @T);
 }
 use starknet::{ContractAddress, syscalls::call_contract_syscall};
-
+use core::num::traits::Zero;
 #[starknet::contract]
 pub mod AttackCounterV2 {
+    use super::Zero;
     use crate::counter_v2::{ICounterV2Dispatcher, ICounterV2DispatcherTrait};
     use starknet::{ContractAddress, syscalls::call_contract_syscall};
     #[storage]
@@ -20,6 +21,7 @@ pub mod AttackCounterV2 {
 
     #[constructor]
     fn constructor(ref self: ContractState, counter_addr: ContractAddress) {
+        assert(!counter_addr.is_zero(), 'ADDRESS ZERO NOT ALLOWED');
         self.counter_address.write(counter_addr)
     }
 
@@ -54,8 +56,8 @@ pub mod AttackCounterV2 {
         fn attack_counter_increase_count_by_one(self: @ContractState) {
             let counter_addr = self.counter_address.read();
             let selector = selector!("increase_count_by_one");
-            
-            let mut args: Array<felt252> = array![];            
+
+            let mut args: Array<felt252> = array![];
 
             call_contract_syscall(counter_addr, selector, args.span());
         }
@@ -69,4 +71,5 @@ pub mod AttackCounterV2 {
 }
 // 0x23390d049eba39e386cc62f10a912b13284b5324f5ee2889da183b8e60c73f4 - class hash
 // 0x5328f79d62ea480df1098d60504258134618eeafd09445c4f5cb27707976d06 - contract address
+
 

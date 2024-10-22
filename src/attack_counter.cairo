@@ -19,7 +19,7 @@ pub trait IAttackCounter<TContractState> {
 #[starknet::contract]
 pub mod AttackCounter {
     use super::IAttackCounter;
-use crate::counter::{ICounterDispatcher, ICounterDispatcherTrait};
+    use crate::counter::{ICounterDispatcher, ICounterDispatcherTrait};
     use starknet::{ContractAddress, syscalls::call_contract_syscall};
     #[storage]
     struct Storage {

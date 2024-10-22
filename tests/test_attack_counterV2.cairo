@@ -36,7 +36,6 @@ fn deploy_util(contract_name: ByteArray, constructor_calldata: Array<felt252>) -
 
 #[test]
 fn test_attack_counter_set_count() {
-
     let mut counterV2_calldata: Array<felt252> = array![Accounts::owner().into()];
     let counterV2_contract_address: ContractAddress = deploy_util("CounterV2", counterV2_calldata);
     let counter_instance = ICounterV2Dispatcher { contract_address: counterV2_contract_address };
@@ -96,13 +95,10 @@ fn test_attack_counter_add_new_owner() {
     assert_eq!(owner_3, Accounts::account2().into());
 
     assert_eq!(owner_3, attacker_instance.counter_get_current_owner());
-
-
 }
 
 #[test]
 fn test_attack_counter_increase_count_by_one() {
-
     let mut counterV2_calldata: Array<felt252> = array![Accounts::owner().into()];
     let counterV2_contract_address: ContractAddress = deploy_util("CounterV2", counterV2_calldata);
     let counter_instance = ICounterV2Dispatcher { contract_address: counterV2_contract_address };
@@ -130,5 +126,4 @@ fn test_attack_counter_increase_count_by_one() {
     println!("count 3____{}", count_3);
     assert_eq!(count_3, 2);
     assert_eq!(count_3, attacker_instance.counter_get_count());
-
 }

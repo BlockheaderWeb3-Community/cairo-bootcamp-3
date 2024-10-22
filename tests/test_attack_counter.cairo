@@ -54,9 +54,9 @@ fn test_can_attacker_counter_count() {
     assert_eq!(count_2, attacker_instance.counter_count());
 
     // call attack count to modify Counter contract's count state value to 200
-     attacker_instance.attack_count(100);
+    attacker_instance.attack_count(100);
 
-      // fetch Counter's 2nd count value
+    // fetch Counter's 2nd count value
     let count_3 = counter_instance.get_count();
     println!("count 3____{}", count_3);
     // Assert that the 3rd count value was successfully set to 200
