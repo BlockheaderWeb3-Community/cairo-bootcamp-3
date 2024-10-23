@@ -1,6 +1,6 @@
 use snforge_std::{declare, ContractClassTrait, DeclareResultTrait, start_cheat_caller_address, spy_events, EventSpyAssertionsTrait };
 use starknet::{ContractAddress};
-use cairo_bootcamp_3::counter_v2::{
+use cairo_bootcamp_3::counter_v2::{   CounterV2,
     ICounterV2Dispatcher, ICounterV2SafeDispatcher, ICounterV2DispatcherTrait,
     ICounterV2SafeDispatcherTrait
 };
@@ -44,17 +44,17 @@ fn test_add_new_owner() {
     counter_v2_dispatcher.add_new_owner(account1);
 
 
-    // spy
-    //     .assert_emitted(
-    //         @array![ 
-    //             (
-    //                 contract_address,
-    //                 SpyEventsChecker::Event::counter_add_new_owner(
-    //                     SpyEventsChecker::counter_add_new_owner {  new_owner: account1 }
-    //                 )
-    //             )
-    //         ]
-    //     );
+    spy
+        .assert_emitted(
+            @array![ 
+                (
+                    contract_address,
+                    CounterV2::Event::counter_add_new_owner(
+                        CounterV2::counter_add_new_owner {  new_owner: account1 }
+                    )
+                )
+            ]
+        );
 
 
 }
