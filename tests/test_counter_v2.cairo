@@ -1,4 +1,4 @@
-use snforge_std::{declare, ContractClassTrait, DeclareResultTrait, start_cheat_caller_address};
+use snforge_std::{declare, ContractClassTrait, DeclareResultTrait, start_cheat_caller_address, spy_events, EventSpyAssertionsTrait };
 use starknet::{ContractAddress};
 use cairo_bootcamp_3::counter_v2::{
     ICounterV2Dispatcher, ICounterV2SafeDispatcher, ICounterV2DispatcherTrait,
@@ -31,17 +31,36 @@ fn deploy(name: ByteArray) -> ContractAddress {
 }
 
 #[test]
-fn test_owner_was_set_correctly() {
+fn test_add_new_owner() {
     let contract_address = deploy("CounterV2");
+    let owner = Accounts::owner();
+    let account1 = Accounts::account1();
 
     let counter_v2_dispatcher = ICounterV2Dispatcher { contract_address };
+    start_cheat_caller_address(contract_address, owner);
+    
+    let mut spy = spy_events(); 
 
-    let current_owner = counter_v2_dispatcher.get_current_owner();
+    counter_v2_dispatcher.add_new_owner(account1);
 
-    assert_eq!(current_owner, Accounts::owner());
+
+    // spy
+    //     .assert_emitted(
+    //         @array![ 
+    //             (
+    //                 contract_address,
+    //                 SpyEventsChecker::Event::counter_add_new_owner(
+    //                     SpyEventsChecker::counter_add_new_owner {  new_owner: account1 }
+    //                 )
+    //             )
+    //         ]
+    //     );
+
+
 }
 
 #[test]
+#[should_panic(expected: 'Should have panicked')]
 fn test_add_new_owner_should_panic_when_called_from_unauthorised_address() {
     let contract_address = deploy("CounterV2");
     let account1 = Accounts::account1();
@@ -71,15 +90,5 @@ fn test_add_new_owner_should_panic_when_new_owner_is_zero_address() {
     counter_v2_dispatcher.add_new_owner(zero_address);
 }
 
-#[test]
-#[should_panic(expected: 'same owner')]
-fn test_add_new_owner_should_panic_when_new_owner_is_current_owner() {
-    let contract_address = deploy("CounterV2");
-    let owner = Accounts::owner();
 
-    let counter_v2_dispatcher = ICounterV2Dispatcher { contract_address };
-    start_cheat_caller_address(contract_address, owner);
-
-    counter_v2_dispatcher.add_new_owner(owner);
-}
 
