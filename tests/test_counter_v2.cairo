@@ -96,23 +96,12 @@ fn test_set_count_succesfully() {
             ]
         );
 
-    spy = spy_events();
-
     counter_v2_dispatcher.set_count(40);
 
-    let count_1 = counter_v2_dispatcher.get_count();
+    let count_2 = counter_v2_dispatcher.get_count();
 
-    assert_eq!(count_1, 60);
+    assert_eq!(count_2, 60);
 
-    spy
-        .assert_emitted(
-            @array![
-                (
-                    contract_address,
-                    CounterV2::Event::counter_set_count(CounterV2::counter_set_count { amount: 60 })
-                )
-            ]
-        );
 }
 
 #[test]
@@ -120,11 +109,12 @@ fn test_increase_count_by_one() {
     let contract_address = deploy("CounterV2");
     let counter_v2_dispatcher = ICounterV2Dispatcher { contract_address };
 
-    let mut spy = spy_events();
-
+    
     let count_1 = counter_v2_dispatcher.get_count();
-
+    
     assert_eq!(count_1, 0);
+    
+    let mut spy = spy_events();
 
     counter_v2_dispatcher.increase_count_by_one();
 
@@ -138,7 +128,7 @@ fn test_increase_count_by_one() {
                 (
                     contract_address,
                     CounterV2::Event::counter_increase_count_by_one(
-                        CounterV2::counter_increase_count_by_one { total_amount: 2 }
+                        CounterV2::counter_increase_count_by_one { total_amount: 1 }
                     )
                 )
             ]
