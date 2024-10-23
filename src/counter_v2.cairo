@@ -60,7 +60,7 @@ pub mod CounterV2 {
 
     #[derive(Copy, Drop, Debug, PartialEq, starknet::Event)]
     pub struct counter_increase_count_by_one {
-        pub total_amount: u32   
+        pub total_amount: u32
     }
 
     #[constructor]
@@ -75,8 +75,11 @@ pub mod CounterV2 {
         fn get_count(self: @ContractState) -> u32 {
             self.count.read()
         }
+        // 0x10b2d12c2221b750cd11ee2a3bc23d950f68daad9f4db9fce89fed1bb7b840d
+        //
 
         fn set_count(ref self: ContractState, amount: u32) {
+            assert(amount != 0, 'amount cannot be zero');
             let current_count: u32 = self.get_count();
             self.count.write(current_count + amount);
 
@@ -94,14 +97,7 @@ pub mod CounterV2 {
 
             self.owner.write(new_owner);
 
-            self
-            .emit(
-                Event::counter_add_new_owner(
-                    counter_add_new_owner {
-                        new_owner: new_owner
-                    }
-                )
-            );
+            self.emit(Event::counter_add_new_owner(counter_add_new_owner { new_owner: new_owner }));
         }
 
 
@@ -111,7 +107,12 @@ pub mod CounterV2 {
             let total_amount: u32 = current_count + 1;
             self.count.write(total_amount);
 
-            self.emit(Event::counter_increase_count_by_one(counter_increase_count_by_one { total_amount }));
+            self
+                .emit(
+                    Event::counter_increase_count_by_one(
+                        counter_increase_count_by_one { total_amount }
+                    )
+                );
         }
 
         // util function to get current owner
