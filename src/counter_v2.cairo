@@ -29,10 +29,38 @@ pub mod CounterV2 {
     use core::num::traits::Zero;
     use super::ICounterV2;
     use starknet::{ContractAddress, get_caller_address};
+
     #[storage]
     struct Storage {
         count: u32,
         owner: ContractAddress
+    }
+
+    // relevant events added
+    #[event]
+    #[derive(Copy, Drop, Debug, PartialEq, starknet::Event)]
+    pub enum Event {
+        counter_set_count: counter_set_count,
+        counter_add_new_owner: counter_add_new_owner,
+        counter_increase_count_by_one: counter_increase_count_by_one
+    }
+
+
+    #[derive(Copy, Drop, Debug, PartialEq, starknet::Event)]
+    pub struct counter_set_count {
+        pub amount: u32
+    }
+
+    #[derive(Copy, Drop, Debug, PartialEq, starknet::Event)]
+    pub struct counter_add_new_owner {
+        #[key]
+        pub new_owner: ContractAddress
+    }
+
+
+    #[derive(Copy, Drop, Debug, PartialEq, starknet::Event)]
+    pub struct counter_increase_count_by_one {
+        pub total_amount: u32   
     }
 
     #[constructor]
@@ -51,6 +79,8 @@ pub mod CounterV2 {
         fn set_count(ref self: ContractState, amount: u32) {
             let current_count: u32 = self.get_count();
             self.count.write(current_count + amount);
+
+            self.emit(Event::counter_set_count(counter_set_count { amount }));
         }
 
         fn add_new_owner(ref self: ContractState, new_owner: ContractAddress) {
@@ -63,13 +93,25 @@ pub mod CounterV2 {
             assert(self.get_current_owner() != new_owner, 'same owner');
 
             self.owner.write(new_owner);
+
+            self
+            .emit(
+                Event::counter_add_new_owner(
+                    counter_add_new_owner {
+                        new_owner: new_owner
+                    }
+                )
+            );
         }
 
 
         // increase count by one
         fn increase_count_by_one(ref self: ContractState) {
             let current_count = self.get_count();
-            self.count.write(current_count + 1)
+            let total_amount: u32 = current_count + 1;
+            self.count.write(total_amount);
+
+            self.emit(Event::counter_increase_count_by_one(counter_increase_count_by_one { total_amount }));
         }
 
         // util function to get current owner
