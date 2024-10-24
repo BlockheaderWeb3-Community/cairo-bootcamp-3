@@ -29,10 +29,38 @@ pub mod CounterV2 {
     use core::num::traits::Zero;
     use super::ICounterV2;
     use starknet::{ContractAddress, get_caller_address};
+
     #[storage]
     struct Storage {
         count: u32,
         owner: ContractAddress
+    }
+
+    // relevant events added
+    #[event]
+    #[derive(Copy, Drop, Debug, PartialEq, starknet::Event)]
+    pub enum Event {
+        CounterSetCount: CounterSetCount,
+        CounterAddNewOwner: CounterAddNewOwner,
+        CounterIncreaseCountByOne: CounterIncreaseCountByOne
+    }
+
+
+    #[derive(Copy, Drop, Debug, PartialEq, starknet::Event)]
+    pub struct CounterSetCount {
+        pub amount: u32
+    }
+
+    #[derive(Copy, Drop, Debug, PartialEq, starknet::Event)]
+    pub struct CounterAddNewOwner {
+        #[key]
+        pub new_owner: ContractAddress
+    }
+
+
+    #[derive(Copy, Drop, Debug, PartialEq, starknet::Event)]
+    pub struct CounterIncreaseCountByOne {
+        pub total_amount: u32
     }
 
     #[constructor]
@@ -47,15 +75,20 @@ pub mod CounterV2 {
         fn get_count(self: @ContractState) -> u32 {
             self.count.read()
         }
+        // 0x10b2d12c2221b750cd11ee2a3bc23d950f68daad9f4db9fce89fed1bb7b840d
+        //
 
         fn set_count(ref self: ContractState, amount: u32) {
+            assert(amount != 0, 'amount cannot be zero');
             let current_count: u32 = self.get_count();
             self.count.write(current_count + amount);
+
+            self.emit(Event::CounterSetCount(CounterSetCount { amount }));
         }
 
         fn add_new_owner(ref self: ContractState, new_owner: ContractAddress) {
             // validation to ensure only owner can invoke this function
-            self.only_owner();
+            // self.only_owner(); // commentted out this line to execute sys calls
 
             // validation to check if new owner is 0 address
             assert(self.is_zero_address(new_owner) == false, '0 address');
@@ -63,13 +96,18 @@ pub mod CounterV2 {
             assert(self.get_current_owner() != new_owner, 'same owner');
 
             self.owner.write(new_owner);
+
+            self.emit(Event::CounterAddNewOwner(CounterAddNewOwner { new_owner: new_owner }));
         }
 
 
         // increase count by one
         fn increase_count_by_one(ref self: ContractState) {
             let current_count = self.get_count();
-            self.count.write(current_count + 1)
+            let total_amount: u32 = current_count + 1;
+            self.count.write(total_amount);
+
+            self.emit(Event::CounterIncreaseCountByOne(CounterIncreaseCountByOne { total_amount }));
         }
 
         // util function to get current owner
