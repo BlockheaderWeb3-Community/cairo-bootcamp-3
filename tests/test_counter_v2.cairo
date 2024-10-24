@@ -54,8 +54,8 @@ fn test_add_new_owner() {
             @array![
                 (
                     contract_address,
-                    CounterV2::Event::counter_add_new_owner(
-                        CounterV2::counter_add_new_owner { new_owner: account1 }
+                    CounterV2::Event::CounterAddNewOwner(
+                        CounterV2::CounterAddNewOwner { new_owner: account1 }
                     )
                 )
             ]
@@ -91,7 +91,7 @@ fn test_set_count_succesfully() {
             @array![
                 (
                     contract_address,
-                    CounterV2::Event::counter_set_count(CounterV2::counter_set_count { amount: 20 })
+                    CounterV2::Event::CounterSetCount(CounterV2::CounterSetCount { amount: 20 })
                 )
             ]
         );
@@ -127,8 +127,8 @@ fn test_increase_count_by_one() {
             @array![
                 (
                     contract_address,
-                    CounterV2::Event::counter_increase_count_by_one(
-                        CounterV2::counter_increase_count_by_one { total_amount: 1 }
+                    CounterV2::Event::CounterIncreaseCountByOne(
+                        CounterV2::CounterIncreaseCountByOne { total_amount: 1 }
                     )
                 )
             ]

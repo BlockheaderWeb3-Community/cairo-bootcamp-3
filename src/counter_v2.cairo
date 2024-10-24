@@ -40,26 +40,26 @@ pub mod CounterV2 {
     #[event]
     #[derive(Copy, Drop, Debug, PartialEq, starknet::Event)]
     pub enum Event {
-        counter_set_count: counter_set_count,
-        counter_add_new_owner: counter_add_new_owner,
-        counter_increase_count_by_one: counter_increase_count_by_one
+        CounterSetCount: CounterSetCount,
+        CounterAddNewOwner: CounterAddNewOwner,
+        CounterIncreaseCountByOne: CounterIncreaseCountByOne
     }
 
 
     #[derive(Copy, Drop, Debug, PartialEq, starknet::Event)]
-    pub struct counter_set_count {
+    pub struct CounterSetCount {
         pub amount: u32
     }
 
     #[derive(Copy, Drop, Debug, PartialEq, starknet::Event)]
-    pub struct counter_add_new_owner {
+    pub struct CounterAddNewOwner {
         #[key]
         pub new_owner: ContractAddress
     }
 
 
     #[derive(Copy, Drop, Debug, PartialEq, starknet::Event)]
-    pub struct counter_increase_count_by_one {
+    pub struct CounterIncreaseCountByOne {
         pub total_amount: u32
     }
 
@@ -83,7 +83,7 @@ pub mod CounterV2 {
             let current_count: u32 = self.get_count();
             self.count.write(current_count + amount);
 
-            self.emit(Event::counter_set_count(counter_set_count { amount }));
+            self.emit(Event::CounterSetCount(CounterSetCount { amount }));
         }
 
         fn add_new_owner(ref self: ContractState, new_owner: ContractAddress) {
@@ -97,7 +97,7 @@ pub mod CounterV2 {
 
             self.owner.write(new_owner);
 
-            self.emit(Event::counter_add_new_owner(counter_add_new_owner { new_owner: new_owner }));
+            self.emit(Event::CounterAddNewOwner(CounterAddNewOwner { new_owner: new_owner }));
         }
 
 
@@ -109,8 +109,8 @@ pub mod CounterV2 {
 
             self
                 .emit(
-                    Event::counter_increase_count_by_one(
-                        counter_increase_count_by_one { total_amount }
+                    Event::CounterIncreaseCountByOne(
+                        CounterIncreaseCountByOne { total_amount }
                     )
                 );
         }
