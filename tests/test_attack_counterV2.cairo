@@ -64,27 +64,6 @@ fn test_attack_counter_set_count() {
     assert_eq!(count_3, 10);
 }
 
-
-// #[test]
-// #[should_panic(expected: 'ADDRESS ZERO NOT ALLOWED')]
-// fn test_attack_counter_set_count_should_panic_if_zero_Address() {
-//     let mut counterV2_calldata: Array<felt252> = array![Accounts::owner().into()];
-//     let counterV2_contract_address: ContractAddress = deploy_util("CounterV2", counterV2_calldata);
-//     let counter_instance = ICounterV2Dispatcher { contract_address: counterV2_contract_address };
-
-//     let count_1 = counter_instance.get_count();
-//     assert_eq!(count_1, 0);
-
-//     let mut attacker_calldata: Array<felt252> = array![];
-//     Accounts::zero().serialize(ref attacker_calldata);
-
-//     let attack_counter_address: ContractAddress = deploy_util("AttackCounterV2", attacker_calldata);
-//     let attacker_instance = IAttackCounterv2Dispatcher { contract_address: attack_counter_address };
-
-// }
-
-
-
 #[test]
 #[should_panic(expected: 'Result::unwrap failed.')]
 fn test_attack_counter_set_count_should_panic_if_zero_Address() {

@@ -26,7 +26,6 @@ pub mod Accounts {
 }
 
 
-
 // Deploys the given contract and returns the contract address
 fn deploy(name: ByteArray) -> ContractAddress {
     let contract = declare(name).unwrap().contract_class();
@@ -103,7 +102,6 @@ fn test_set_count_succesfully() {
     let count_2 = counter_v2_dispatcher.get_count();
 
     assert_eq!(count_2, 60);
-
 }
 
 #[test]
@@ -111,11 +109,10 @@ fn test_increase_count_by_one() {
     let contract_address = deploy("CounterV2");
     let counter_v2_dispatcher = ICounterV2Dispatcher { contract_address };
 
-    
     let count_1 = counter_v2_dispatcher.get_count();
-    
+
     assert_eq!(count_1, 0);
-    
+
     let mut spy = spy_events();
 
     counter_v2_dispatcher.increase_count_by_one();

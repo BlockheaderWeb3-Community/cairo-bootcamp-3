@@ -107,12 +107,7 @@ pub mod CounterV2 {
             let total_amount: u32 = current_count + 1;
             self.count.write(total_amount);
 
-            self
-                .emit(
-                    Event::CounterIncreaseCountByOne(
-                        CounterIncreaseCountByOne { total_amount }
-                    )
-                );
+            self.emit(Event::CounterIncreaseCountByOne(CounterIncreaseCountByOne { total_amount }));
         }
 
         // util function to get current owner
