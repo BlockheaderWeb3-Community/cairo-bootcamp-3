@@ -82,7 +82,7 @@ fn test_attack_counter_set_count_should_panic_if_zero_Address() {
     let count_1 = counter_instance.get_count();
     assert_eq!(count_1, 0);
 
-    // trying to serialize wuth zero address to make the function panic 
+    // trying to serialize wuth zero address to make the function panic
     let mut attacker_calldata: Array<felt252> = array![];
     Accounts::zero().serialize(ref attacker_calldata);
     deploy_util("AttackCounterV2", attacker_calldata);
