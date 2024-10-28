@@ -22,6 +22,8 @@ pub trait IStudentRegistry<T> {
         _xp: u16,
         _is_active: bool
     ) -> bool;
+
+    fn get_current_owner(self: @T) -> ContractAddress;
 }
 
 
@@ -124,6 +126,9 @@ pub mod StudentRegistry {
             student_pointer.write(new_student);
 
             true
+        }
+        fn get_current_owner(self: @ContractState) -> ContractAddress {
+            self.admin.read()
         }
     }
 
