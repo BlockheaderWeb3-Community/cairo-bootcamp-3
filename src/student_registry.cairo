@@ -44,6 +44,33 @@ pub mod StudentRegistry {
         students_vector: Vec<Student>
     }
 
+    #[event]
+    #[derive(Copy, Drop, Debug, PartialEq, starknet::Event)]
+    pub enum Event {
+        AddStudent: AddStudent,
+        UpdateStudent: UpdateStudent,
+    }
+
+
+    #[derive(Copy, Drop, Debug, PartialEq, starknet::Event)]
+    pub struct AddStudent {
+        pub id: u32,
+        pub name: felt252,
+        pub account: ContractAddress,
+        pub age: u8,
+        pub xp: u16,
+        pub is_active: bool
+    }
+
+    #[derive(Copy, Drop, Debug, PartialEq, starknet::Event)]
+    pub struct UpdateStudent {
+        pub id: u32,
+        pub name: felt252,
+        pub account: ContractAddress,
+        pub age: u8,
+        pub xp: u16,
+        pub is_active: bool
+    }
 
     #[constructor]
     fn constructor(ref self: ContractState, _admin: ContractAddress) {
