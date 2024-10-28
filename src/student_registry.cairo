@@ -85,7 +85,7 @@ pub mod StudentRegistry {
             self: @ContractState, student_id: u64
         ) -> (u64, felt252, ContractAddress, u8, u16, bool) {
             // validation to check if account is valid
-            assert(student_id > 0, 'id cannot < 0');
+            // assert(student_id > 0, 'id cannot < 0');
             let student = self.students_vector.at(student_id).read();
             (student.id, student.name, student.account, student.age, student.xp, student.is_active)
         }
