@@ -10,12 +10,16 @@ pub mod StudentRegistryManager {
     use super::IStudentRegistryManager;
     use crate::student_registry::StudentRegistryComponent;
     use openzeppelin::access::ownable::OwnableComponent;
+    use crate::student_attendance::StudentAttendanceComponent;
 
     // Declare component
     component!(
         path: StudentRegistryComponent, storage: studentRegistry, event: StudentRegistryEvent
     );
     component!(path: OwnableComponent, storage: ownable, event: OwnableEvent);
+    component!(
+        path: StudentAttendanceComponent, storage: studentAttendance, event: AttendanceEvent
+    );
 
     #[abi(embed_v0)]
     impl OwnableMixinImpl = OwnableComponent::OwnableMixinImpl<ContractState>;
@@ -27,8 +31,13 @@ pub mod StudentRegistryManager {
     impl studentRegistryImpl =
         StudentRegistryComponent::StudentRegistry<ContractState>;
 
+    #[abi(embed_v0)]
+    impl studentAttendanceImpl =
+        StudentAttendanceComponent::StudentAttendance<ContractState>;
+
     // instantiate component's private implementation
     impl studentRegisterPrivateImpl = StudentRegistryComponent::Private<ContractState>;
+    impl studentAttendancePrivateImpl = StudentAttendanceComponent::Private<ContractState>;
 
     #[storage]
     struct Storage {
@@ -36,7 +45,9 @@ pub mod StudentRegistryManager {
         #[substorage(v0)] // component's storage variable must be annotated with this attribute
         studentRegistry: StudentRegistryComponent::Storage,
         #[substorage(v0)]
-        ownable: OwnableComponent::Storage
+        ownable: OwnableComponent::Storage,
+        #[substorage(v0)]
+        studentAttendance: StudentAttendanceComponent::Storage
     }
 
     #[event]
@@ -46,7 +57,9 @@ pub mod StudentRegistryManager {
         #[flat] // component's event must be annotated with this attribute
         StudentRegistryEvent: StudentRegistryComponent::Event,
         #[flat]
-        OwnableEvent: OwnableComponent::Event
+        OwnableEvent: OwnableComponent::Event,
+        #[flat]
+        AttendanceEvent: StudentAttendanceComponent::Event
     }
 
     #[derive(Drop, starknet::Event)]
@@ -61,6 +74,7 @@ pub mod StudentRegistryManager {
 
         // initialize component
         self.studentRegistry.initializer(_admin);
+        self.studentAttendance.initializer(_admin);
     }
 
     #[abi(embed_v0)]

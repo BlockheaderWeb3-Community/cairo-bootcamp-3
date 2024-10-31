@@ -9,3 +9,4 @@ pub mod ownable_counter;
 pub mod addition;
 
 pub mod student_registry_manager;
+pub mod student_attendance;
