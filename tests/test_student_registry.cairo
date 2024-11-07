@@ -1,4 +1,4 @@
-use snforge_std::{declare, ContractClassTrait, DeclareResultTrait, start_cheat_caller_address};
+use snforge_std::{declare, ContractClassTrait, DeclareResultTrait};
 use starknet::{ContractAddress};
 use cairo_bootcamp_3::student_registry::{
     IStudentRegistryDispatcher, IStudentRegistryDispatcherTrait
@@ -63,7 +63,7 @@ fn contract_deployed_successfully() {
     assert_eq!(owner, Accounts::owner().into());
 }
 
-// student addition failed when user is passing zero address
+// student addition failed when zero address is being passed
 #[test]
 #[should_panic(expected: 'ZERO ADDRESS!')]
 fn test_add_student_should_panic_when_account_is_zero_address() {
@@ -86,7 +86,7 @@ fn test_add_student_should_panic_when_account_is_zero_address() {
     assert!(!result, "should be false");
 }
 
-// student addition failed when users age is zero
+// student addition failed when user's age is zero
 #[test]
 #[should_panic(expected: 'age cannot be 0')]
 fn test_add_student_should_panic_when_age_is_zero() {

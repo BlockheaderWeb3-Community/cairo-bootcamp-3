@@ -1,4 +1,4 @@
-use snforge_std::{declare, ContractClassTrait, DeclareResultTrait, start_cheat_caller_address};
+use snforge_std::{declare, ContractClassTrait, DeclareResultTrait,};
 
 
 use starknet::{ContractAddress};
@@ -156,7 +156,7 @@ fn test_attack_counter_increase_count_by_one() {
     // call the attacker contract again to confirm
     attacker_instance.attack_counter_increase_count_by_one();
 
-    // checl weather it was successful
+    // check if was successful
     let count_3 = counter_instance.get_count();
     assert_eq!(count_3, 2);
     assert_eq!(count_3, attacker_instance.counter_get_count());
